@@ -1,0 +1,167 @@
+<html>
+<head>
+	<title>Pacman</title>
+	<style type="text/css">
+		body{
+			background-color: black;
+			margin:0px;
+		}
+		div.row div {
+			width:32px;
+			height:32px;
+			display:inline-block;
+		}
+
+		div.brick{
+			background-color:brown;
+		}
+
+		div.empty{
+			background-color:black;
+		}
+
+		div.coin{
+			background: url("http://vignette2.wikia.nocookie.net/stabyourself/images/2/20/Coin.gif/revision/latest?cb=20150107151427");
+		}
+
+		/*div.cherry{
+            background: url("http://www.cherrybombkitchen.com/wp-content/uploads/2012/12/cherrie8bit_sm.png");
+        }*/
+
+		div#pacman{
+			background: url("http://media.tumblr.com/179501c5f9a8ca0a0cf12be8720ad105/tumblr_inline_mhzqtbYVdp1roozkr.gif");
+			width:32px;
+			height:32px;	
+		}
+
+		div#score{
+			position:bottom;
+			top:5px;
+			left:430px;
+			border:2px solid white;
+			padding:10px;
+			width:25px;
+			height:25px;
+			text-align: center;
+			color:white;
+			font-size:20px;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<div id='world'>
+	</div>
+
+	<div id='score'>0</div>
+
+	<div id='pacman' style='position:absolute;'></div>
+
+
+		<script>
+		var score = 0;
+		var pacman = {
+			x: 1,
+			y: 1
+			
+		}
+		var world = [
+
+			[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2], //1
+            [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2], //2	
+            [2,1,2,2,1,2,2,2,2,1,2,1,2,2,2,2,1,2,2,1,2], //3
+            [2,1,2,1,1,1,2,1,1,1,1,1,1,1,2,1,1,1,2,1,2], //4
+            [2,1,2,1,2,1,2,1,2,2,1,2,2,1,2,1,2,1,2,1,2], //5
+            [2,1,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,1,2], //6
+            [2,2,1,2,2,2,1,2,1,1,1,1,1,2,1,2,2,2,1,2,2], //7
+            [2,1,1,1,1,1,1,2,2,2,2,2,2,2,1,1,1,1,1,1,2], //8
+            [2,1,2,2,2,2,1,1,1,1,1,1,1,1,1,2,2,2,2,1,3], //9
+            [2,1,3,1,1,2,1,2,2,2,1,2,2,2,1,2,1,1,1,1,1], //10
+            [2,2,2,2,1,1,1,2,1,0,1,0,1,2,1,1,1,2,2,2,2], //11
+            [2,3,1,2,1,2,1,2,2,2,2,2,2,2,1,2,1,2,0,0,2], //12
+            [3,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,2], //13
+            [2,1,2,2,1,2,2,2,2,1,2,1,2,2,2,2,1,2,3,1,1], //14
+            [2,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,2], //15
+            [2,2,1,2,1,2,1,2,2,2,2,2,2,2,1,2,1,2,1,2,2], //16
+            [2,1,1,1,1,2,1,1,1,1,2,1,1,1,3,2,1,0,2,2,2], //17
+            [2,1,2,2,2,2,2,2,2,1,2,1,2,2,2,2,2,2,2,1,2], //18
+            [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2], //19
+            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2], //20
+		];
+		function displayPacman(){
+			document.getElementById('pacman').style.top = pacman.y*32;
+			document.getElementById('pacman').style.left = pacman.x*32;
+		}
+		function updateScore(){
+			document.getElementById('score').innerHTML = score;
+		}
+
+		function displayWorld(){
+			var output = '';
+			for(var i=0; i<world.length; i++){
+				output += "\n<div class='row'>";
+				for(var j=0; j<world[i].length; j++){
+					if(world[i][j] == 2){
+						output += "<div class='brick'></div>";
+					}
+					else if(world[i][j] == 1){
+						output += "<div class='coin'></div>";
+					}
+					else if(world[i][j] == 0){
+						output += "<div class='empty'></div>";
+					}
+				}
+				output += "\n</div>";
+			}
+			// console.log(output);
+			document.getElementById('world').innerHTML = output;
+		}
+		displayWorld();
+		displayPacman();
+
+		document.onkeydown = function(e){
+			if(e.keyCode == 37){
+				if(world[pacman.y][pacman.x-1]!=2){
+				pacman.x--;
+				}
+			}
+
+			else if(e.keyCode == 39){
+				if(world[pacman.y][pacman.x+1]!=2){
+				pacman.x++;
+				}
+			}
+
+			else if(e.keyCode == 38){
+				if(world[pacman.y-1][pacman.x]!=2){
+					pacman.y--;
+				}
+				
+			}
+
+			else if(e.keyCode == 40){
+				console.log(world[pacman.x][pacman.y+1]);
+                if(world[pacman.y+1][pacman.x]!=2){
+                	console.log("that");
+                	pacman.y++;
+                }
+				
+			}
+
+			if(world[pacman.y][pacman.x] == 1){
+				world[pacman.y][pacman.x] = 0;
+				score += 10;
+			}
+
+			displayPacman();
+			displayWorld();
+			updateScore();
+		}
+		</script>
+
+	</div>
+
+</body>
+</html>
